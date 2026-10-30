@@ -2,6 +2,14 @@
 
 EXECUTABLES_PIDS=()
 
+stop_executables() {
+    for pid in "${APP_PIDS[@]}"; do
+        kill "$pid"
+    done
+}
+# Sets to run cleanup on script exit
+trap cleanup EXIT
+
 start_executables() {
     # Change me to a loop later also unhardcode ip
     "./project1_executables/APM1" "192.168.206.135" &
