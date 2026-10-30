@@ -28,4 +28,6 @@ start_executables() {
     printf '%s\n' "${EXECUTABLES_PIDS[@]}"
 }
 
-start_executables
+process_data (pid) {
+
+}
