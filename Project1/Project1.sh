@@ -2,12 +2,12 @@
 
 EXECUTABLES_PIDS=()
 
-stop_executables() {
+cleanup() {
     for pid in "${APP_PIDS[@]}"; do
         kill "$pid"
     done
 }
-# Sets to run cleanup on script exit
+# Sets to run stop_executables on script exit
 trap cleanup EXIT
 
 start_executables() {
