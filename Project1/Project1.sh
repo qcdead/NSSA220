@@ -34,7 +34,16 @@ start_executables() {
 
 process_data (pid) {
     PROCCESS_OUTPUT+= "$SECONDS"
-    process_data= (ps -p "$pid" -o %cpu, %mem | tail -n +2 )
+    process_data= (ps -p "$pid" -o %cpu, %mem | tail -n +2)
     PROCCESS_OUTPUT=+ "$process_data"
+}
+
+
+run_loop (){
+    SECONDS+= 5
+    for pid in "${EXECUTABLES_PIDS[@]}" do
+        #somethng
+    done
+    #add systems cvs writer here
 }
 
