@@ -47,3 +47,48 @@ run_loop (){
     #add systems cvs writer here
 }
 
+eset_vars() {
+        CPU="none"
+        MEM="none"
+        NETWORK="none"
+        DISK="none"
+        NET_RX="none"
+        NET_TX="none"
+        TEST="none"
+}
+
+app_data_collector() {
+        local current_pid=$1
+        # vars will get filled using ps for this specific pid
+        CPU="0%"
+        MEM="0%"
+}
+
+main() {
+        for pid in $APP_PIDS;
+        do
+            create_csv(pid)
+        done
+	while true;
+        do
+            for pid in $APP_PIDS
+                do
+                    reset_vars
+                        # set var values using current  pid
+                        app_data_collector($pid)
+                        # set system var values
+                        sys_data_collector
+
+                        # check to make sure the pid exists, probably a better way to do this
+                        if $CPU != "none";
+                        then
+                        # append neew line to csv, need to make sure it won't throw in a newline char at the end
+                        echo "$SECONDS,$CPU,$MEM" >> "$pid.csv"
+                        fi
+                done
+                # update system log
+                echo "$SECONDS,$DISK,$NET_RX" >> "system.csv"
+        sleep 5
+        done
+}
+main()
