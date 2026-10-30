@@ -4,7 +4,7 @@ EXECUTABLES_PIDS=()
 
 cleanup() {
     for pid in "${EXECUTABLES_PIDS[@]}"; do
-        kill "$pid"
+        kill "$pid" 2>/dev/null
     done
 }
 # Sets to run cleanup on script exit
