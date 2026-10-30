@@ -2,6 +2,10 @@
 
 EXECUTABLES_PIDS=()
 
+SECONDS=()
+
+PROCCESS_OUTPUT=()
+
 cleanup() {
     for pid in "${EXECUTABLES_PIDS[@]}"; do
         kill "$pid" 2>/dev/null
@@ -29,5 +33,8 @@ start_executables() {
 }
 
 process_data (pid) {
-
+    PROCCESS_OUTPUT+= "$SECONDS"
+    process_data= (ps -p "$pid" -o %cpu, %mem | tail -n +2 )
+    PROCCESS_OUTPUT=+ "$process_data"
 }
+
