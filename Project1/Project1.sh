@@ -59,7 +59,7 @@ sys_data_collector() {
     # collect system data!
     # assign values to GLOBAL vars!!!!!
     # # (NET_RX, NET_TX, DISK_WRITES, DISK_CAPACITY)
-    echo "hi"
+    DISK_CAPACITY=$(df --block-size=M --output=avail / | tail -n +2)
 }
 
 main() {
@@ -94,6 +94,7 @@ main() {
                     then
                     # append new line to csv, need to make sure it won't throw in a newline char at the end
                     echo "$SECONDS,$CPU,$MEM" >> "${current_apm_name}_metrics.csv"
+                    #       ^ seconds is a built in var that tracks from start of script time
                     fi
                 done
 
