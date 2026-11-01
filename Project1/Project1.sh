@@ -59,7 +59,7 @@ sys_data_collector() {
     # collect system data!
     # assign values to GLOBAL vars!!!!!
     # # (NET_RX, NET_TX, DISK_WRITES, DISK_CAPACITY)
-
+    echo "hi"
 }
 
 main() {
