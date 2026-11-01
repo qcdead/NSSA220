@@ -56,6 +56,7 @@ app_data_collector() {
 
 sys_data_collector() {
     # collect system data!
+    
 }
 
 main() {
