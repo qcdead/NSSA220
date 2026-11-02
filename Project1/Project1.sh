@@ -59,6 +59,23 @@ sys_data_collector() {
     # collect system data!
     # assign values to GLOBAL vars!!!!!
     # # (NET_RX, NET_TX, DISK_WRITES, DISK_CAPACITY)
+    # Network RX and TX in kB/s
+    local NET_OUTPUT
+    NET_OUTPUT=($(ifstat -i ens160 1 1 | tail -n 1))
+
+    NET_RX=${NET_OUTPUT[0]}
+    NET_TX=${NET_OUTPUT[1]}
+
+    # Disk writes in kB/s
+    DISK_WRITES=$(iostat -d -k -y sda 1 1 | awk '
+        /^Device/ {
+            for (i = 1; i <= NF; i++)
+                if ($i == "kB_wrtn/s") col = i
+        }
+        $1 == "sda" && col {print $col}
+    ')
+
+    # Available disk capacity in MB
     DISK_CAPACITY=$(df --block-size=M --output=avail / | tail -n +2)
 }
 
