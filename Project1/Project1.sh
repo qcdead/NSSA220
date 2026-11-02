@@ -58,8 +58,10 @@ apm_data_collector() {
 sys_data_collector() {
     # collect system data!
     # assign values to GLOBAL vars!!!!!
-    NET_RX=$(ifstat -t 1 ens192 | awk '$1 == "ens192" {print $7}')
-    NET_TX=$(ifstat -t 1 ens192 | awk '$1 == "ens192" {print $9}')
+    local NET_OUTPUT
+
+    NET_OUTPUT=$(ifstat ens192 | awk '$1 == "ens192" {print $7, $9}')
+    read -r NET_RX NET_TX <<< "$NET_OUTPUT"
 
     # Disk writes in kB/s
     DISK_WRITES=$(iostat -d -k -y sda 1 1 | awk '
@@ -71,7 +73,7 @@ sys_data_collector() {
     ')
 
     # Available disk capacity in MB
-    DISK_CAPACITY=$(df --block-size=M --output=avail / | tail -n +2)
+    DISK_CAPACITY=$(df --block-size=M --output=avail / | tail -n +2 | tr -d ' M')
 }
 
 main() {
