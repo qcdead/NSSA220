@@ -10,6 +10,8 @@ cleanup() {
     for pid in "${APM_DICT[@]}"; do
         kill "$pid" 2>/dev/null
     done
+
+    kill "$IFSTAT_PID" 2>/dev/null
 }
 
 start_apms() {
@@ -60,7 +62,7 @@ sys_data_collector() {
     # assign values to GLOBAL vars!!!!!
     local NET_OUTPUT
 
-    NET_OUTPUT=$(ifstat ens192 | awk '$1 == "ens192" {print $7, $9}')
+    NET_OUTPUT=$(ifstat ens192 | awk '$1 == "ens192" {printf "%.2f %.2f\n", $7, $9}')
     read -r NET_RX NET_TX <<< "$NET_OUTPUT"
 
     # Disk writes in kB/s
@@ -77,6 +79,10 @@ sys_data_collector() {
 }
 
 main() {
+
+    # Start Ifstat sampler
+    ifstat -d 1 -t 1
+    IFSTAT_PID=$(pgrep -n -u "$(id -u)" -x ifstat)
     # start APM 1 - 6
     start_apms
     
